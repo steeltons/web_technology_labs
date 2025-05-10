@@ -2,7 +2,8 @@ import csv
 
 from app import app
 from config import db
-from models import Country, City, TypeBuilding, Building
+from models import Country, City, TypeBuilding, Building, User
+
 
 def fill_country_table():
     with open('data/country.csv', mode='r', encoding='windows-1251') as file:
@@ -49,6 +50,11 @@ def fill_building_table():
             db.session.add(building)
         db.session.commit()
 
+def fill_user_table():
+    user = User('stey', '123321', False)
+    db.session.add(user)
+    db.session.commit()
+
 def init_database():
     app.app_context().push()
     with app.app_context():
@@ -61,3 +67,4 @@ if __name__ == '__main__':
     fill_city_table()
     fill_type_building_table()
     fill_building_table()
+    fill_user_table()

@@ -1,12 +1,15 @@
 ### GET ALL BUILDINGS
 GET http://localhost:5000/structures/api/v1/buildings
+Authorization: Basic {{default_basic_auth_header}}
 
 ### GET BUILDING BY ID
 GET http://localhost:5000/structures/api/v1/buildings/1
+Authorization: Basic {{default_basic_auth_header}}
 
 ### CREATE NEW BUILDING
 POST http://localhost:5000/structures/api/v1/buildings
 Content-Type: application/json
+Authorization: Basic {{default_basic_auth_header}}
 
 {
   "title" : "test building",
@@ -19,6 +22,7 @@ Content-Type: application/json
 ### UPDATE EXISTED
 PUT http://localhost:5000/structures/api/v1/buildings/65
 Content-Type: application/json
+Authorization: Basic {{default_basic_auth_header}}
 
 {
   "title" : "new test building",
@@ -29,3 +33,4 @@ Content-Type: application/json
 ### DELETE BY ID
 
 DELETE http://localhost:5000/structures/api/v1/buildings/65
+Authorization: Basic {{default_basic_auth_header}}

@@ -62,3 +62,17 @@ class Building(db.Model):
         self.city_id = city_id
         self.year = year
         self.height = height
+
+class User(db.Model):
+    __tablename__ = 'users'
+
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(100), unique=True, nullable=False)
+    password = db.Column(db.String(64), nullable=False)
+    is_blocked = db.Column(db.Boolean, default=False)
+
+    def __init__(self, username, password, is_blocked, id=None):
+        self.id = id
+        self.username = username
+        self.password = password
+        self.is_blocked = is_blocked
