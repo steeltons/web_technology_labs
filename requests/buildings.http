@@ -1,0 +1,31 @@
+### GET ALL BUILDINGS
+GET http://localhost:5000/structures/api/v1/buildings
+
+### GET BUILDING BY ID
+GET http://localhost:5000/structures/api/v1/buildings/1
+
+### CREATE NEW BUILDING
+POST http://localhost:5000/structures/api/v1/buildings
+Content-Type: application/json
+
+{
+  "title" : "test building",
+  "year" : 1900,
+  "height" : 0.0,
+  "type_building_id" : 1,
+  "city_id" : 1
+}
+
+### UPDATE EXISTED
+PUT http://localhost:5000/structures/api/v1/buildings/65
+Content-Type: application/json
+
+{
+  "title" : "new test building",
+  "year" : 2000,
+  "height" : 500.0
+}
+
+### DELETE BY ID
+
+DELETE http://localhost:5000/structures/api/v1/buildings/65

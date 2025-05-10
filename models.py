@@ -55,7 +55,8 @@ class Building(db.Model):
     type_building = db.relationship("TypeBuilding", back_populates="buildings")
     city = db.relationship("City", back_populates="buildings")
 
-    def __init__(self, title, type_building_id, city_id, year, height):
+    def __init__(self, title, year, height, id= None, type_building_id=None, city_id=None):
+        self.id = id
         self.title = title
         self.type_building_id = type_building_id
         self.city_id = city_id
