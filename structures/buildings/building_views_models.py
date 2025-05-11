@@ -1,6 +1,6 @@
 from config import db
 from exceptions import NotFoundException
-from models import Building
+from building_views_models import Building
 
 def find_all_buidlings():
     return Building.query.all()

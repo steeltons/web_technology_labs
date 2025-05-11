@@ -1,8 +1,8 @@
 from http import HTTPStatus
 from flask import jsonify, make_response, request
 from app import app, auth
-from structures.buildings.models import find_all_buidlings, find_by_id, create, delete_by_id, update
-from structures.buildings.serializers import building_schema, building_schemas, building_deserializer, building_update_deserializer
+from structures.buildings.building_views_models import find_all_buidlings, find_by_id, create, delete_by_id, update
+from structures.buildings.building_views_serializers import building_schema, building_schemas, building_deserializer, building_update_deserializer
 
 _DELETE_SUCCESS_RESPONSE = {"success": True}
 

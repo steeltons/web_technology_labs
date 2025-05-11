@@ -1,10 +1,6 @@
-from email.policy import default
-
-from jinja2.utils import missing
-
 from config import ma, db
 from marshmallow import fields, post_load
-from models import Building, City, TypeBuilding
+from building_views_models import Building, City, TypeBuilding
 
 class CitySchema(ma.SQLAlchemySchema):
     class Meta:

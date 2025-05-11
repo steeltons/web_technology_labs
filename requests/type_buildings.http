@@ -1,0 +1,24 @@
+### GET ALL TYPE BUIDLINGS
+GET http://localhost:5000/structures/api/v1/type-buildings
+
+### CRETE TYPE BUILDING
+POST http://localhost:5000/structures/api/v1/type-buildings
+Content-Type: application/json
+
+{
+  "type" : "Super building"
+}
+
+### GET TYPE BUILDING BY ID
+GET http://localhost:5000/structures/api/v1/type-buildings/9
+
+### UPDATE TYPE BUILDING
+PUT http://localhost:5000/structures/api/v1/type-buildings/9
+Content-Type: application/json
+
+{
+  "type" : "New super building1"
+}
+
+### DELETE TYPE BUILDING BY ID
+DELETE http://localhost:5000/structures/api/v1/type-buildings/9

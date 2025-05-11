@@ -1,0 +1,25 @@
+### GET ALL CITIES
+GET http://localhost:5000/structures/api/v1/cities
+
+### CREATE NEW CITY
+POST http://localhost:5000/structures/api/v1/cities
+Content-Type: application/json
+
+{
+  "name" : "New cities",
+  "country_id" : 1
+}
+
+### GET CITY BY ID
+GET http://localhost:5000/structures/api/v1/cities/42
+
+### UPDATE CITY
+PUT http://localhost:5000/structures/api/v1/cities/42
+Content-Type: application/json
+
+{
+  "name" : "New Yorrrrrk"
+}
+
+### DELETE CITY BY ID
+DELETE http://localhost:5000/structures/api/v1/cities/42

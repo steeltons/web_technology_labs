@@ -1,0 +1,24 @@
+### GET ALL COUNTRIES
+GET http://localhost:5000/structures/api/v1/countries
+
+### CREATE COUNTRY
+POST http://localhost:5000/structures/api/v1/countries
+Content-Type: application/json
+
+{
+  "name" : "New countries"
+}
+
+### GET COUNTRY BY ID
+GET http://localhost:5000/structures/api/v1/countries/23
+
+### UPDATE COUNTRY
+PUT http://localhost:5000/structures/api/v1/countries/23
+Content-Type: application/json
+
+{
+  "name" : "Updated countries"
+}
+
+### DELETE COUNTRY BY ID
+DELETE http://localhost:5000/structures/api/v1/countries/23
