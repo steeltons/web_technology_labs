@@ -1,5 +1,4 @@
 from exceptions import NotFoundException
-from models import TypeBuilding
 from config import db
 from structures.type_buildings.type_building_resource_serializer import *
 

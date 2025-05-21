@@ -11,6 +11,13 @@ class CitySerializer(ma.SQLAlchemySchema):
     name = ma.auto_field()
     country_id = ma.auto_field()
 
+    _links = ma.Hyperlinks({
+        'self': ma.URLFor('cityresource', values= dict(id="<id>")),
+        'collection' : ma.URLFor('citiesresource'),
+        'update' : ma.URLFor('cityresource', values=dict(id="<id>")),
+        'delete' : ma.URLFor('cityresource', values=dict(id="<id>")),
+    })
+
 class CityDeserializer(ma.Schema):
     name = fields.Str(required=True, error_messages={"required": "Name wasn't provided"})
     country_id = fields.Integer(required=True, error_messages={"required": "Country id wasn't provided"})

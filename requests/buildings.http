@@ -3,7 +3,7 @@ GET http://localhost:5000/structures/api/v1/buildings
 Authorization: Basic {{default_basic_auth_header}}
 
 ### GET BUILDING BY ID
-GET http://localhost:5000/structures/api/v1/buildings/1
+GET http://localhost:5000/structures/api/v1/buildings/65
 Authorization: Basic {{default_basic_auth_header}}
 
 ### CREATE NEW BUILDING
@@ -26,8 +26,7 @@ Authorization: Basic {{default_basic_auth_header}}
 
 {
   "title" : "new test building",
-  "year" : 2000,
-  "height" : 500.0
+  "height" : 666.6
 }
 
 ### DELETE BY ID

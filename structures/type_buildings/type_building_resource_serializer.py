@@ -1,3 +1,5 @@
+from sqlalchemy import values
+
 from app import ma
 from models import TypeBuilding
 
@@ -9,6 +11,10 @@ class TypeBuildingResourceSerializer(ma.SQLAlchemySchema):
 
     id = ma.auto_field()
     type = ma.auto_field()
+
+    _links = ma.Hyperlinks({
+        'self' : ma.URLFor('typebuildingresource', values=dict(id="<id>")),
+    })
 
 class TypeBuildingResourceDeserializer(ma.Schema):
     type = fields.Str(required=True, error_messages={"required": "Type is required"})

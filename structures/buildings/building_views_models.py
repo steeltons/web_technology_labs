@@ -1,8 +1,10 @@
 from config import db
 from exceptions import NotFoundException
-from building_views_models import Building
+from models import Building
+from utils.utils import get_or_default
+from sqlalchemy import update
 
-def find_all_buidlings():
+def find_all_buildings():
     return Building.query.all()
 
 def find_by_id(id : int):
@@ -37,7 +39,9 @@ def update(id : int, dst : Building):
         raise NotFoundException(f'Building with id={id} not found')
 
     updated = __update_model(src, dst)
-    Building.query.filter_by(id=id).update(updated.__dict__)
+    update_dict = __get_update_dict_params(updated)
+    print(update_dict)
+    Building.query.filter_by(id=id).update(update_dict)
     db.session.commit()
 
     return updated
@@ -47,9 +51,19 @@ def __update_model(src : Building, dst: Building):
         id=src.id,
         type_building_id=src.type_building_id,
         city_id=src.city_id,
-        title= dst.title if dst.title is not None else src.title,
-        year= dst.year if dst.year is not None else src.year,
-        height= dst.height if dst.height is not None else src.height,
+        title= get_or_default(dst.title, src.title),
+        year= get_or_default(dst.year, src.year),
+        height= get_or_default(dst.height, src.height)
     )
 
     return new_building
+
+def __get_update_dict_params(value : Building):
+    return dict(
+        id = value.id,
+        type_building_id= value.type_building_id,
+        city_id= value.city_id,
+        title= value.title,
+        year= value.year,
+        height= value.height
+    )

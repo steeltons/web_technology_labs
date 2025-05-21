@@ -11,6 +11,13 @@ class CountryResourceSerializer(ma.SQLAlchemySchema):
     id = ma.auto_field()
     name = ma.auto_field()
 
+    _links = ma.Hyperlinks({
+        'self': ma.URLFor('countryresource', values= dict(id="<id>")),
+        'collection' : ma.URLFor('countrylistresource'),
+        'update' : ma.URLFor('countryresource', values= dict(id="<id>")),
+        'delete' : ma.URLFor('countryresource', values= dict(id="<id>")),
+    })
+
 class CountryResourceDeserializer(ma.Schema):
     name = fields.Str(required=True, error_messages={"required": "Name is required"})
 

@@ -1,6 +1,7 @@
 from config import ma, db
 from marshmallow import fields, post_load
-from building_views_models import Building, City, TypeBuilding
+from models import Building, City, TypeBuilding
+
 
 class CitySchema(ma.SQLAlchemySchema):
     class Meta:
@@ -16,6 +17,13 @@ class TypeBuilding(ma.SQLAlchemySchema):
     id = ma.auto_field()
     type = ma.auto_field()
 
+    _links = ma.Hyperlinks({
+        'self' : ma.URLFor('typebuildingresource', values= dict(id= "<id>")),
+        'collection' : ma.URLFor('typebuildinglistresource'),
+        'update' : ma.URLFor('typebuildingresource', values=dict(id= "<id>")),
+        'delete' : ma.URLFor('typebuildingresource', values=dict(id= "<id>")),
+    })
+
 class BuildingSchema(ma.SQLAlchemySchema):
 
     class Meta:
@@ -29,6 +37,15 @@ class BuildingSchema(ma.SQLAlchemySchema):
     height = ma.auto_field()
     city = ma.Nested(CitySchema())
     type_building = ma.Nested(TypeBuilding())
+
+    _links = ma.Hyperlinks(
+        {
+            "self" : ma.URLFor("get_building", values=dict(id="<id>")),
+            "collection" : ma.URLFor("get_all_buildings"),
+            "update" : ma.URLFor("update_building", values=dict(id="<id>")),
+            "delete" : ma.URLFor("delete_building", values=dict(id="<id>")),
+        }
+    )
 
 class BuildingDeserializer(ma.Schema):
     title = fields.Str(required=True, error_messages={"required": "title wasn't found"})
