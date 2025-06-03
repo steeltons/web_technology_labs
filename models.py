@@ -23,7 +23,8 @@ class Continent(db.Model):
 
     countries = db.relationship('Country', cascade='all, delete', lazy='dynamic')
 
-    def __init__(self, name, code):
+    def __init__(self, name, code, id= None):
+        self.id = id
         self.name = name
         self.code = code
 
@@ -39,7 +40,8 @@ class Country(db.Model):
     continent = db.relationship("Continent", back_populates="countries")
     airports = db.relationship("Airport", cascade='all, delete', lazy='dynamic')
 
-    def __init__(self, name, code, continent_id= None):
+    def __init__(self, name, code, continent_id= None, id= None):
+        self.id = id
         self.name = name
         self.code = code
         self.continent_id = continent_id
@@ -55,7 +57,8 @@ class Airport(db.Model):
 
     country = db.relationship("Country", back_populates="airports")
 
-    def __init__(self, name, code, country_id= None):
+    def __init__(self, name, code, country_id= None, id= None):
+        self.id = id
         self.name = name
         self.code = code
         self.country_id = country_id
@@ -69,7 +72,8 @@ class Pilot(db.Model):
 
     flights = db.relationship('Flight', back_populates='pilot')
 
-    def __init__(self, name):
+    def __init__(self, name, id= None):
+        self.id = id
         self.name = name
 
 class FlightStatus(enum.Enum):
@@ -105,11 +109,10 @@ class Flight(db.Model):
     arrival_airport_id = db.Column('arrival_airport_id', db.Integer, db.ForeignKey('airports.id'))
     pilot_id = db.Column('pilot_id', db.Integer, db.ForeignKey('pilots.id'))
 
-    # departure_airport = db.relationship("Airport")
-    # arrival_airport = db.relationship("Airport")
     pilot = db.relationship("Pilot", back_populates="flights")
 
-    def __init__(self, departure_date, flight_status= FlightStatus.UNKNOWN, departure_airport_id=None, arrival_airport_id=None, pilot_id=None):
+    def __init__(self, departure_date, flight_status= FlightStatus.UNKNOWN, departure_airport_id=None, arrival_airport_id=None, pilot_id=None, id= None):
+        self.id = id
         self.departure_date = departure_date
         self.flight_status = flight_status
         self.departure_airport_id = departure_airport_id

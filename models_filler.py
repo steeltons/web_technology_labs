@@ -93,7 +93,7 @@ def __add_flight_info(airport_code_id_dict, pilot_name_id_dict, row):
     from_airport_id = airport_code_id_dict[row['From Airport Code']]
     to_airport_id = airport_code_id_dict[row['To Airport Code']]
     pilot_id = pilot_name_id_dict[row['Pilot']]
-    departure_date = datetime.strptime(row['Departure Date'].replace('/', '-'), '%m-%d-%Y')
+    departure_date = datetime.strptime(row['Departure Date'].replace('/', '-'), '%Y-%m-%d')
     flight_status = FlightStatus.find_by_column_value(row['Flight Status'])
 
     flight = Flight(

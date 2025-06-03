@@ -1,0 +1,29 @@
+### GET ALL
+
+GET localhost:5000/api/v1/continents
+
+### CREATE CONTINENT
+
+POST localhost:5000/api/v1/continents
+Content-Type: application/json
+
+{
+  "name" : "test continent",
+  "code" : "AA"
+}
+
+### GET BY ID
+GET localhost:5000/api/v1/continents/5
+
+### UPDATE
+PUT localhost:5000/api/v1/continents/5
+Content-Type: application/json
+
+{
+  "id" : 5,
+  "name" : "new name",
+  "code" : "BBB"
+}
+
+### DELETE
+DELETE localhost:5000/api/v1/continents/5
