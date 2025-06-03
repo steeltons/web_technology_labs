@@ -1,63 +1,117 @@
+import enum
+
 from config import db
+from sqlalchemy import Enum
+
+class ContinentCode(enum.Enum):
+
+    UNKNOWN = 0
+    AS = 1
+    EU = 2
+    NA = 3
+    OC = 4
+    AF = 5
+    SA = 6
+
+class Continent(db.Model):
+
+    __tablename__ = 'continents'
+
+    id = db.Column('id', db.Integer, primary_key=True)
+    name = db.Column('name', db.String(100))
+    code = db.Column('code', db.String(100))
+
+    countries = db.relationship('Country', cascade='all, delete', lazy='dynamic')
+
+    def __init__(self, name, code):
+        self.name = name
+        self.code = code
 
 class Country(db.Model):
+
     __tablename__ = 'countries'
 
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column('name', db.String(100), nullable=False)
+    id = db.Column('id', db.Integer, primary_key=True)
+    name = db.Column('name', db.String(100))
+    code = db.Column('code', db.String(100))
+    continent_id = db.Column('continent_id', db.Integer, db.ForeignKey('continents.id'))
 
-    cities = db.relationship("City", cascade='all, delete')
+    continent = db.relationship("Continent", back_populates="countries")
+    airports = db.relationship("Airport", cascade='all, delete', lazy='dynamic')
+
+    def __init__(self, name, code, continent_id= None):
+        self.name = name
+        self.code = code
+        self.continent_id = continent_id
+
+class Airport(db.Model):
+
+    __tablename__ = 'airports'
+
+    id = db.Column('id', db.Integer, primary_key=True)
+    name = db.Column('name', db.String(100))
+    code = db.Column('code', db.String(100))
+    country_id = db.Column('country_id', db.Integer, db.ForeignKey('countries.id'))
+
+    country = db.relationship("Country", back_populates="airports")
+
+    def __init__(self, name, code, country_id= None):
+        self.name = name
+        self.code = code
+        self.country_id = country_id
+
+class Pilot(db.Model):
+
+    __tablename__ = 'pilots'
+
+    id = db.Column('id', db.Integer, primary_key=True)
+    name = db.Column('name', db.String(100))
+
+    flights = db.relationship('Flight', back_populates='pilot')
 
     def __init__(self, name):
         self.name = name
 
+class FlightStatus(enum.Enum):
 
-class TypeBuilding(db.Model):
-    __tablename__ = 'type_buildings'
+    UNKNOWN = 0, 'UNKNOWN'
+    ON_TIME = 1, 'On Time',
+    CANCELLED = 2, 'Cancelled',
+    DELAYED = 3, 'Delayed',
 
-    id = db.Column(db.Integer, primary_key=True)
-    type = db.Column('type', db.String(50), nullable=False)
+    def __new__(cls, *args, **kwargs):
+        obj = object.__new__(cls)
+        obj._value_ = args[0]
+        return obj
 
-    buildings = db.relationship("Building", cascade='all, delete')
+    def __init__(self, _, column_value):
+        self.column_value = column_value
 
-    def __init__(self, type):
-        self.type = type
+    @staticmethod
+    def find_by_column_value(value):
+        for status in FlightStatus:
+            if value == status.column_value:
+                return status
+        raise Exception(f"FlightStatus was'n found: value={value}")
 
-    def __repr__(self):
-        return f"\n{self.id}. {self.type}"
+class Flight(db.Model):
 
+    __tablename__ = 'flights'
 
-class City(db.Model):
-    __tablename__ = 'cities'
+    id = db.Column('id', db.Integer, primary_key=True)
+    departure_date = db.Column('departure_date', db.Date)
+    flight_status = db.Column('flight_status', Enum(FlightStatus))
+    departure_airport_id = db.Column('departure_airport_id', db.Integer, db.ForeignKey('airports.id'))
+    arrival_airport_id = db.Column('arrival_airport_id', db.Integer, db.ForeignKey('airports.id'))
+    pilot_id = db.Column('pilot_id', db.Integer, db.ForeignKey('pilots.id'))
 
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column('name', db.String(100))
-    country_id = db.Column(db.Integer, db.ForeignKey('countries.id'))
+    # departure_airport = db.relationship("Airport")
+    # arrival_airport = db.relationship("Airport")
+    pilot = db.relationship("Pilot", back_populates="flights")
 
-    country = db.relationship("Country", back_populates="cities")
-    buildings = db.relationship("Building", cascade='all, delete')
-
-    def __init__(self, name, country_id = None):
-        self.name = name
-        self.country_id = country_id
-
-
-class Building(db.Model):
-    __tablename__ = 'buildings'
-
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column('title', db.String(200))
-    type_building_id = db.Column(db.Integer, db.ForeignKey('type_buildings.id'))
-    city_id = db.Column(db.Integer, db.ForeignKey('cities.id'))
-    year = db.Column(db.Integer)
-    height = db.Column(db.Integer)
-
-    type_building = db.relationship("TypeBuilding", back_populates="buildings")
-    city = db.relationship("City", back_populates="buildings")
-
-    def __init__(self, title, type_building_id, city_id, year, height):
-        self.title = title
-        self.type_building_id = type_building_id
-        self.city_id = city_id
-        self.year = year
-        self.height = height
+    def __init__(self, departure_date, flight_status= FlightStatus.UNKNOWN, departure_airport_id=None, arrival_airport_id=None, pilot_id=None):
+        self.departure_date = departure_date
+        self.flight_status = flight_status
+        self.departure_airport_id = departure_airport_id
+        self.arrival_airport_id = arrival_airport_id
+        self.pilot_id = pilot_id
