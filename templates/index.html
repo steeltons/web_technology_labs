@@ -7,11 +7,20 @@
     <link rel="stylesheet" href="/static/style.css" />
   </head>
   <body>
-    <h3>Список пилотов, которые отлетали больше, чем {{ pilot_flights_number }} полётов</h3>
-    {{ render_table_macros.render_table(pilots_flights_header, pilots_flights_body) }}
+    <h3>A1</h3>
+    {{ render_table_macros.render_table(flight_full_info_head, flight_full_info_body) }}
     <br>
-    <h3>Список рейсов, летевших в тот же самый континет</h3>
-    {{ render_table_macros.render_table(flights_same_continent_header, flights_same_continent_body) }}
+    <h3>A2</h3>
+    {{ render_table_macros.render_table(pilot_info_header, pilot_info_body) }}
+    <br>
+    <h3>A3</h3>
+    {{ render_table_macros.render_table(countries_arrival_avg_head, countries_arrival_avg_body) }}
+    <br>
+    <h3>A4</h3>
+    {{ render_table_macros.render_table(countries_min_max_avg_header, countries_min_max_avg_body) }}
+    <br>
+    <h3>A5</h3>
+    {{ render_table_macros.render_table(flight_min_max_head, flight_min_max_body) }}
     <br>
   </body>
 </html>
