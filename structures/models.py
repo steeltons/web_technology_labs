@@ -2,7 +2,8 @@ from sqlalchemy.orm import aliased
 
 from config import db
 from models import Flight, Airport, Pilot, Continent, Country
-from sqlalchemy import func, alias, desc
+from sqlalchemy import func, alias, desc, distinct
+
 
 def find_all_flights_with_airports_and_countries():
     departure_airport = aliased(Airport)
@@ -61,18 +62,25 @@ def find_all_pilots_departure_arrive_continent_same():
     )
     return query.statement.columns.keys(), query.all()
 
-def find_all_countries_with_min_max_avg():
+def find_continent_stats():
+    """
+    Возвращает список кортежей:
+      (continent_name, countries_count, airports_count, departures_count)
+    отсортированных по departures_count DESC, затем по continent_name.
+    """
     query = (
         db.session.query(
-            Country.code.label("Код страны"),
-            Country.name.label("Страна"),
-            func.min(Flight.id).label("Минимальное число вылетов"),
-            func.max(Flight.id).label("Максимальное число вылетов"),
-            func.avg(Flight.id).label("Среднее число вылетов")
+            Continent.name.label('Название континента'),
+            Continent.code.label('Код континента'),
+            func.count(distinct(Country.id)).label('Число стран, в которые были полёты'),
+            func.count(distinct(Airport.id)).label('Число аэропортов, в которые были полёты'),
+            func.count(Flight.id).label('Число полётов'),
         )
-        .select_from(Country)
-        .join(Airport, Airport.country_id == Country.id)
+        .join(Country, Country.continent_id == Continent.id)
+        .join(Airport, Airport.country_id    == Country.id)
         .join(Flight, Flight.departure_airport_id == Airport.id)
+        .group_by(Continent.name)
+        .order_by(desc('Число полётов'), Continent.name)
     )
 
     return query.statement.columns.keys(), query.all()

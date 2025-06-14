@@ -7,19 +7,19 @@
     <link rel="stylesheet" href="/static/style.css" />
   </head>
   <body>
-    <h3>A1</h3>
+    <h3>Получение информации по всем полётам с присоединением аэропортов и стран</h3>
     {{ render_table_macros.render_table(flight_full_info_head, flight_full_info_body) }}
     <br>
-    <h3>A2</h3>
+    <h3>Получение всех пилотов, кто вылетал и прилетал в ту же самую страну</h3>
     {{ render_table_macros.render_table(pilot_info_header, pilot_info_body) }}
     <br>
-    <h3>A3</h3>
+    <h3>Статистика по континиенту (число стран, в которые происходил перелёт, число аэропортов и кол-во перелётов)</h3>
+    {{ render_table_macros.render_table(continent_stats_header, continent_stats_body) }}
+    <br>
+    <h3>Получение всех стран, число прилётов в которые больше, чем среднее число прилётов по всем странам</h3>
     {{ render_table_macros.render_table(countries_arrival_avg_head, countries_arrival_avg_body) }}
     <br>
-    <h3>A4</h3>
-    {{ render_table_macros.render_table(countries_min_max_avg_header, countries_min_max_avg_body) }}
-    <br>
-    <h3>A5</h3>
+    <h3>Статистика по аэропорту (число вылетов, мин и макс дата вылета)</h3>
     {{ render_table_macros.render_table(flight_min_max_head, flight_min_max_body) }}
     <br>
   </body>
