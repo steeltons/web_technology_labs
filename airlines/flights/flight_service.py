@@ -4,7 +4,7 @@ from airlines.flights.flight_serializer import *
 from models import Flight, FlightStatus
 
 def get_all():
-    flights = Flight.query.all()
+    flights = Flight.query.limit(100).all()
     return flight_list_serializer.dump(flights)
 
 def get_by_id(id):
