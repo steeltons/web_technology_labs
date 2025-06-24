@@ -79,17 +79,17 @@ class Pilot(db.Model):
 class FlightStatus(enum.Enum):
 
     UNKNOWN = 0, 'UNKNOWN'
-    ON_TIME = 1, 'On Time',
-    CANCELLED = 2, 'Cancelled',
-    DELAYED = 3, 'Delayed',
+    ON_TIME = 1, 'В пути',
+    CANCELLED = 2, 'Отменён',
+    DELAYED = 3, 'Завершён',
 
     def __new__(cls, *args, **kwargs):
         obj = object.__new__(cls)
         obj._value_ = args[0]
         return obj
 
-    def __init__(self, _, column_value):
-        self.column_value = column_value
+    def __init__(self, _, display_name):
+        self.display_name = display_name
 
     @staticmethod
     def find_by_column_value(value):

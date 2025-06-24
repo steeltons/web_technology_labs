@@ -15,6 +15,20 @@ def get_all_flights():
     app.logger.debug(f'END flight_view.get_all_flights request_id={str(request_id)}, count={len(result)}')
     return make_response(result, HTTPStatus.OK)
 
+@app.route(__REQUEST_MAPPING_URL + '/pageable', methods=['GET'])
+def get_all_pageable_flights():
+    request_id = uuid4()
+    page = int(request.args.get('page', None))
+    limit = int(request.args.get('limit', None))
+    statusStr = request.args.get('status', None)
+    print(statusStr)
+    status = FlightStatus[statusStr] if statusStr else None
+    app.logger.debug(f'START flight_view.get_all_pageable_flights request_id={str(request_id)}, page={page}, limit={limit}, status={status}')
+    result = get_pageable_flights(page, limit, status)
+    app.logger.debug(f'END flight_view.get_all_pageable_flights request_id={str(request_id)}, page={page}, limit={limit}, status={status}')
+    return make_response(result, HTTPStatus.OK)
+
+
 @app.route(__REQUEST_MAPPING_URL + '/<id>', methods=['GET'])
 def get_flight_by_id(id):
     app.logger.debug(f'START flight_view.get_flight_by_id id={str(id)}')

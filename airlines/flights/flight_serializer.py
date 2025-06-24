@@ -1,7 +1,17 @@
 from config import ma
 from marshmallow import fields, post_load
 from marshmallow_enum import EnumField
-from models import Flight, FlightStatus
+from models import Flight, FlightStatus, Airport
+
+
+class DepartureAirportUi(ma.SQLAlchemySchema):
+    class Meta:
+        model = Airport
+
+    id = ma.auto_field()
+    name = ma.auto_field()
+    code = ma.auto_field()
+    country_id = ma.auto_field()
 
 class FlightSerializer(ma.SQLAlchemySchema):
     class Meta:
@@ -23,6 +33,16 @@ class FlightSerializer(ma.SQLAlchemySchema):
         'update': ma.URLFor('update_existing_flight', values=dict(id='<id>')),
         'delete': ma.URLFor('delete_existing_flight', values=dict(id='<id>')),
     })
+
+class FlightUiSerializer(ma.SQLAlchemySchema):
+    class Meta:
+        model = Flight
+        load_instance = True
+
+    id = ma.auto_field()
+    departure_date = ma.auto_field()
+    flight_status = EnumField(FlightStatus).display_name
+    departure_airport = ma.auto_field()
 
 class FlightUpdateDeserializer(ma.Schema):
     departure_date = fields.Date()

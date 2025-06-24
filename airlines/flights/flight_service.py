@@ -4,8 +4,27 @@ from airlines.flights.flight_serializer import *
 from models import Flight, FlightStatus
 
 def get_all():
-    flights = Flight.query.limit(100).all()
+    flights = Flight.query.all()
     return flight_list_serializer.dump(flights)
+
+def get_pageable_flights(page : int | None, limit : int | None, status : FlightStatus | None):
+    query = Flight.query
+
+    if status is not None:
+        query = query.filter(Flight.flight_status == status)
+    paginated = query.paginate(page=page, per_page=limit, error_out=False)
+
+    flights = paginated.items
+
+    data = flight_list_serializer.dump(flights)
+
+    return {
+        'data' : data,
+        'totalElements' : paginated.total,
+        'currentPage' : paginated.page,
+        'totalPages' : paginated.pages,
+        'perPage' : paginated.per_page,
+    }
 
 def get_by_id(id):
     flight = Flight.query.filter_by(id=id).first()
