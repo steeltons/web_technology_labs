@@ -3,16 +3,6 @@ from marshmallow import fields, post_load
 from marshmallow_enum import EnumField
 from models import Flight, FlightStatus, Airport
 
-
-class DepartureAirportUi(ma.SQLAlchemySchema):
-    class Meta:
-        model = Airport
-
-    id = ma.auto_field()
-    name = ma.auto_field()
-    code = ma.auto_field()
-    country_id = ma.auto_field()
-
 class FlightSerializer(ma.SQLAlchemySchema):
     class Meta:
         model = Flight
@@ -41,8 +31,8 @@ class FlightUiSerializer(ma.SQLAlchemySchema):
 
     id = ma.auto_field()
     departure_date = ma.auto_field()
-    flight_status = EnumField(FlightStatus).display_name
-    departure_airport = ma.auto_field()
+    flight_status = EnumField(FlightStatus)
+    # departure_airport = ma.auto_field()
 
 class FlightUpdateDeserializer(ma.Schema):
     departure_date = fields.Date()
@@ -56,6 +46,55 @@ class FlightUpdateDeserializer(ma.Schema):
         if 'flight_status' in data:
             data['flight_status'] = FlightStatus[data['flight_status']]
         return Flight(**data)
+
+from marshmallow_enum import EnumField
+from models import Flight, FlightStatus, Airport, Country, Pilot
+
+
+class CountrySerializer(ma.SQLAlchemySchema):
+    class Meta:
+        model = Country
+
+    id = ma.auto_field()
+    name = ma.auto_field()
+    code = ma.auto_field()
+    continentId = ma.auto_field("continent_id", data_key="continentId")
+
+
+class AirportSerializer(ma.SQLAlchemySchema):
+    class Meta:
+        model = Airport
+
+    id = ma.auto_field()
+    code = ma.auto_field()
+    country_id = ma.auto_field()
+    country = ma.Nested(CountrySerializer)
+
+
+class PilotSerializer(ma.SQLAlchemySchema):
+    class Meta:
+        model = Pilot
+
+    id = ma.auto_field()
+    name = ma.auto_field()
+
+
+class FlightUiSerializer(ma.SQLAlchemySchema):
+    class Meta:
+        model = Flight
+        load_instance = True
+
+    id = ma.auto_field()
+    departureDate = ma.auto_field('departure_date', data_key='departureDate')
+    flightStatus = EnumField(FlightStatus, attribute='flight_status', data_key='flightStatus')
+
+    departureAirportId = ma.auto_field('departure_airport_id', data_key='departureAirportId')
+    arrivalAirportId = ma.auto_field('arrival_airport_id', data_key='arrivalAirportId')
+    pilotId = ma.auto_field('pilot_id', data_key='pilotId')
+
+    departureAirport = ma.Nested(AirportSerializer, attribute='departure_airport', data_key='departureAirport')
+    arrivalAirport = ma.Nested(AirportSerializer, attribute='arrival_airport', data_key='arrivalAirport')
+    pilot = ma.Nested(PilotSerializer)
 
 class FlightCreateDeserializer(ma.Schema):
     departure_date = fields.Date(required=True)
@@ -72,3 +111,4 @@ flight_serializer = FlightSerializer()
 flight_update_deserializer = FlightUpdateDeserializer()
 flight_list_serializer = FlightSerializer(many=True)
 flight_create_deserializer = FlightCreateDeserializer()
+flight_ui_serializer = FlightUiSerializer(many=True)

@@ -16,7 +16,8 @@ def get_pageable_flights(page : int | None, limit : int | None, status : FlightS
 
     flights = paginated.items
 
-    data = flight_list_serializer.dump(flights)
+    print('Before')
+    data = flight_ui_serializer.dump(flights)
 
     return {
         'data' : data,
